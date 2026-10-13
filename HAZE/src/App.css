@@ -1,0 +1,203 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  font-family: 'DM Sans', sans-serif;
+  scroll-behavior: smooth;
+  background: #0b0d0d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+h1, h2, h3, nav {
+  font-family: 'Outfit', sans-serif;
+}
+
+.haze-page {
+  color: white;
+  min-height: 100vh;
+  position: relative;
+  isolation: isolate;
+  background: #0b0d0d;
+  overflow: hidden;
+}
+
+/* Burning forest background */
+.haze-page::before {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  inset: 0 0 auto;
+  height: 930px;
+
+  background-image:
+    linear-gradient(90deg,
+      rgba(7, 10, 10, 0.94) 0%,
+      rgba(7, 10, 10, 0.73) 45%,
+      rgba(7, 10, 10, 0.28) 100%
+    ),
+    linear-gradient(0deg,
+      #0b0d0d 0%,
+      transparent 42%
+    ),
+    url('https://www.focus.it/images/2023/08/11/incendi-orig.jpg');
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Soft orange fire glow */
+.haze-page::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 180px;
+  right: -220px;
+  width: 550px;
+  height: 550px;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(234, 88, 12, 0.13),
+    transparent 70%
+  );
+}
+
+.hero-section {
+  display: flex;
+  align-items: center;
+  min-height: 740px;
+  padding-top: 80px;
+  padding-bottom: 130px;
+}
+
+.hero-title {
+  font-size: clamp(4rem, 9vw, 8rem);
+  line-height: 0.93;
+  letter-spacing: -0.065em;
+}
+
+.content-section {
+  padding: 85px 0 110px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(17, 20, 20, 0.8)
+  );
+}
+
+.section-label {
+  color: #fb923c;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+}
+
+.tips-section {
+  padding: 90px 0;
+  background: #101313;
+}
+
+.haze-card {
+  background: #1a1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  transition: transform 0.25s, border-color 0.25s,
+    background 0.25s;
+}
+
+.haze-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(251, 146, 60, 0.45);
+  background: #222625;
+}
+
+.tip-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 55px;
+  height: 55px;
+  border-radius: 15px;
+  background: rgba(251, 146, 60, 0.1);
+  font-size: 1.75rem;
+}
+
+.haze-alert {
+  background: linear-gradient(
+    110deg,
+    #292019,
+    #1a1d1c
+  );
+  border: 1px solid rgba(251, 146, 60, 0.3);
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 650px;
+    padding-top: 90px;
+    padding-bottom: 80px;
+  }
+
+  .hero-title {
+    font-size: clamp(3.8rem, 13vw, 6rem);
+  }
+
+  .haze-page::before {
+    height: 780px;
+    background-position: 60% top;
+  }
+
+  .content-section,
+  .tips-section {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+}
+
+/* Make all text white */
+.haze-page {
+  color: #ffffff;
+}
+
+/* Headings and paragraphs */
+.haze-page h1,
+.haze-page h2,
+.haze-page h3,
+.haze-page h4,
+.haze-page p,
+.haze-page span,
+.haze-page li,
+.haze-page nav,
+.haze-page a {
+  color: #ffffff;
+}
+
+/* Keep orange highlighted text */
+.haze-page .text-orange-400,
+.haze-page .text-orange-300,
+.haze-page .section-label {
+  color: #fb923c;
+}
+
+/* Keep secondary descriptions light grey */
+.haze-page .text-gray-300,
+.haze-page .text-gray-400,
+.haze-page .text-gray-500 {
+  color: #d1d5db;
+}
+
+/* Keep text on orange buttons dark for contrast */
+.haze-page .btn-warning {
+  color: #171717;
+}
