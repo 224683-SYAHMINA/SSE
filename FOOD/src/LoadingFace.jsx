@@ -1,0 +1,1 @@
+export default function LoadingFace() { return <div className="hangry-loading" role="status" aria-label="Loading Hangry"><div className="mood-face"><span className="mood-eye left"/><span className="mood-eye right"/><span className="mood-mouth"/></div><strong>Hangry!</strong><span>Feed Your Mood</span></div> }

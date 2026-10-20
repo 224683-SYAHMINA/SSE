@@ -1,0 +1,51 @@
+import { useState } from 'react'
+import Icon from './Icon'
+import { orderSteps } from './data'
+
+const states = ['Johor', 'Kedah', 'Kelantan', 'Melaka', 'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak', 'Selangor', 'Terengganu', 'Wilayah Persekutuan Kuala Lumpur', 'Wilayah Persekutuan Labuan', 'Wilayah Persekutuan Putrajaya']
+
+function addressOf(customer) {
+  return [customer.address1, customer.address2, [customer.postcode, customer.city].filter(Boolean).join(' '), customer.state].filter(Boolean).join(', ') || customer.address || ''
+}
+
+export default function Order({ cart, subtotal, deliveryFee, total, formatPrice, onBack, onCheckout, onQuantity, currentOrder, customer, onCustomerChange, addresses = [] }) {
+
+  const [reviewing, setReviewing] = useState(false)
+  const count = cart.reduce((sum, item) => sum + item.quantity, 0)
+  const updateCustomer = (field, value) => { onCustomerChange(previous => ({ ...previous, [field]: value })); setReviewing(false) }
+  const submitDetails = (event) => { event.preventDefault(); setReviewing(true) }
+  const confirmOrder = () => { onCheckout(); setReviewing(false) }
+  const saved = currentOrder?.customer || {}
+
+  return <section className="order-page"><div className="container">
+    <div className="order-heading"><div><span className="overline">{('YOUR HANGRY! EXPERIENCE')}</span><h1>{'My order'}</h1><p>{('Review your food and confirm where we should deliver it.')}</p></div><button className="btn btn-ghost text-link" onClick={onBack}>{('← Back to menu')}</button></div>
+
+    {currentOrder && <div className="card tracking-panel">
+      <div className="tracking-head"><div><span className="overline">{('ORDER CONFIRMATION')}</span><h2>Order {currentOrder.id}</h2><p>{("Placed")} {new Date(currentOrder.placedAt).toLocaleString('en-MY')}</p></div><span className="badge tracking-status">{(orderSteps[currentOrder.stage])}</span></div>
+      <ul className="steps steps-horizontal tracking-steps">{orderSteps.map((step,index) => <li key={step} className={`step ${index <= currentOrder.stage ? 'step-primary' : ''}`}>{(step)}</li>)}</ul>
+      <div className="order-receipt"><div><strong>{('Customer')}</strong><p>{saved.name} · {saved.phone}</p>{saved.email && <p>{saved.email}</p>}<strong>{('Delivery address')}</strong><p>{addressOf(saved)}</p>{saved.note && <p>{("Instructions:")} {saved.note}</p>}</div><div><strong>{('Payment')}</strong><p>{(saved.payment)}</p><strong>{('Order total')}</strong><p>{formatPrice(currentOrder.total)}</p></div></div>
+      <p className="tracking-footer">{('Your order has been received. Check this page for order updates.')}</p>
+    </div>}
+
+    {cart.length === 0 ? <div className="card order-empty"><span className="order-empty-icon"><Icon name="bag" size={47}/></span><h2>{(currentOrder ? 'Still feeling hungry?' : 'Your next favourite meal starts here.')}</h2><p>{(currentOrder ? 'Discover more great food while you wait.' : 'Explore our restaurants and add something delicious to your order.')}</p><button className="btn dark-button" onClick={onBack}>{('Explore menu')} <Icon name="arrow" size={18}/></button></div>
+    : <form className="order-layout order-checkout" onSubmit={submitDetails}>
+      <div className="order-checkout-left"><div className="card order-items"><h2>{('Items')} <span className="badge">{count}</span></h2>{cart.map(item => <article className="order-item" key={item.id}>{item.image ? <img src={item.image} alt={item.name}/> : <div className="order-placeholder"><Icon name={item.category==='Drinks'?'cup':'utensils'} size={25}/></div>}<div className="order-item-details"><span>{item.restaurant}</span><h3>{item.name}</h3><div className="join qty"><button type="button" className="btn btn-sm join-item" aria-label={`Remove one ${item.name}`} onClick={()=>{onQuantity(item.id,-1);setReviewing(false)}}><Icon name="minus" size={14}/></button><span>{item.quantity}</span><button type="button" className="btn btn-sm join-item" aria-label={`Add one ${item.name}`} onClick={()=>{onQuantity(item.id,1);setReviewing(false)}}><Icon name="plus" size={14}/></button></div></div><strong>{formatPrice(item.price*item.quantity)}</strong></article>)}</div>
+
+      {!reviewing ? <div className="card delivery-details"><span className="overline">{('PERSONAL INFORMATION')}</span><h2>{('Your details')}</h2><p className="checkout-helper">{('Enter your contact information and delivery address.')}</p>
+        {addresses.length>0&&<label className="form-control"><span>{('Saved delivery address')}</span><select className="select select-bordered" defaultValue="" onChange={e=>{const address=addresses.find(a=>a.id===e.target.value);if(address){onCustomerChange(prev=>({...prev,...Object.fromEntries(['address1','address2','postcode','city','state','note'].map(k=>[k,address[k]||'']))}));setReviewing(false)}}}><option value="" disabled>{('Select a saved address')}</option>{addresses.map(a=><option key={a.id} value={a.id}>{a.label||'Address'} — {a.address1}</option>)}</select></label>}
+        <div className="delivery-grid"><label className="form-control"><span>{('Full name *')}</span><input className="input input-bordered" required autoComplete="name" maxLength={100} value={customer.name || ''} onChange={e=>updateCustomer('name',e.target.value)} placeholder={('Your full name')}/></label><label className="form-control"><span>{('Phone number *')}</span><input className="input input-bordered" required type="tel" pattern="[0-9+() -]{8,18}" title={("Enter a valid phone number")} autoComplete="tel" value={customer.phone || ''} onChange={e=>updateCustomer('phone',e.target.value)} placeholder="012-345 6789"/></label></div>
+        <label className="form-control"><span>{('Email address *')}</span><input className="input input-bordered" required type="email" autoComplete="email" value={customer.email || ''} onChange={e=>updateCustomer('email',e.target.value)} placeholder="you@example.com"/></label>
+        <div className="checkout-subheading"><Icon name="pin" size={19}/><h3>{('Delivery address')}</h3></div>
+        <label className="form-control"><span>{('Address line 1 *')}</span><input className="input input-bordered" required minLength={5} autoComplete="address-line1" value={customer.address1 || ''} onChange={e=>updateCustomer('address1',e.target.value)} placeholder={('House number and street name')}/></label>
+        <label className="form-control"><span>{('Address line 2 (optional)')}</span><input className="input input-bordered" autoComplete="address-line2" value={customer.address2 || ''} onChange={e=>updateCustomer('address2',e.target.value)} placeholder={('Apartment, unit, floor or building')}/></label>
+        <div className="delivery-grid"><label className="form-control"><span>{('Postcode *')}</span><input className="input input-bordered" required inputMode="numeric" pattern="[0-9]{5}" title={("Enter a 5-digit Malaysian postcode")} maxLength={5} autoComplete="postal-code" value={customer.postcode || ''} onChange={e=>updateCustomer('postcode',e.target.value)} placeholder="47301"/></label><label className="form-control"><span>{('City *')}</span><input className="input input-bordered" required autoComplete="address-level2" value={customer.city || ''} onChange={e=>updateCustomer('city',e.target.value)} placeholder="Petaling Jaya"/></label></div>
+        <label className="form-control"><span>{('State / Federal Territory *')}</span><select className="select select-bordered" required autoComplete="address-level1" value={customer.state || ''} onChange={e=>updateCustomer('state',e.target.value)}><option value="" disabled>{('Select state')}</option>{states.map(state=><option key={state} value={state}>{state}</option>)}</select></label>
+        <label className="form-control"><span>{('Delivery instructions (optional)')}</span><textarea className="textarea textarea-bordered" rows={3} maxLength={500} value={customer.note || ''} onChange={e=>updateCustomer('note',e.target.value)} placeholder={('Landmark, guardhouse or arrival instructions')}/></label>
+        <div className="checkout-subheading"><Icon name="check" size={19}/><h3>{('Payment method')}</h3></div>
+        <div className="payment-options">{['Cash on delivery','Card on delivery','Online banking (FPX)'].map(method=><label key={method} className="checkout-radio"><input className="radio radio-primary" type="radio" name="payment" checked={customer.payment===method} onChange={()=>updateCustomer('payment',method)}/><span>{(method)}</span></label>)}<p className="payment-hint">{('Online banking selection does not collect credentials or charge an account on this page.')}</p></div>
+      </div> : <div className="card delivery-details"><span className="overline">{('REVIEW YOUR DETAILS')}</span><h2>{('Ready for delivery?')}</h2><div className="review-details"><strong>{('Personal information')}</strong><p>{customer.name}<br/>{customer.phone}<br/>{customer.email}</p><strong>{('Delivery address')}</strong><p>{addressOf(customer)}</p>{customer.note && <p>{("Instructions:")} {customer.note}</p>}<strong>{('Payment method')}</strong><p>{(customer.payment)}</p></div><button type="button" className="btn btn-outline edit-details" onClick={()=>setReviewing(false)}>{('Edit personal information')}</button></div>}
+      </div>
+      <aside className="card order-summary"><span className="overline">{('ORDER SUMMARY')}</span><h2>{('Good choices.')}</h2><div className="summary-line"><span>{('Subtotal')}</span><strong>{formatPrice(subtotal)}</strong></div><div className="summary-line"><span>{('Delivery fee')}</span><strong>{formatPrice(deliveryFee)}</strong></div><div className="summary-line total-line"><span>{('Total')}</span><strong>{formatPrice(total)}</strong></div>{reviewing ? <button type="button" className="btn checkout-button" onClick={confirmOrder}>{('Confirm & place order')} <Icon name="arrow" size={17}/></button> : <button type="submit" className="btn checkout-button">{('Review order')} <Icon name="arrow" size={17}/></button>}<p className="summary-assurance"><Icon name="check" size={16}/> {(reviewing ? 'Please confirm that your delivery details are correct.' : 'You can check your details before placing your order.')}</p></aside>
+    </form>}
+  </div></section>
+}

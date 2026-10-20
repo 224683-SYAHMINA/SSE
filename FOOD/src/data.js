@@ -1,0 +1,60 @@
+export const photos = {
+  hero: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1500&q=85',
+  nasi: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=1000&q=85',
+  burger: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1000&q=85',
+  ramen: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=1000&q=85',
+  salad: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1000&q=85',
+  cake: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1000&q=85',
+  coffee: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=1000&q=85',
+}
+// Sample restaurant profiles, scores and reviews are fictional, for UI demonstration.
+export const restaurants = [
+  { id: 1, name: 'Dapur Warisan', cuisine: 'Traditional Malaysian', category: 'Local', rating: 4.9, reviewCount: 148, eta: '20–30 min', image: photos.nasi, reviews: [{author:'Aina R.',rating:5,text:'The sambal has such a lovely homemade flavour.'},{author:'Farid H.',rating:5,text:'Generous portions and comforting local dishes.'}] },
+  { id: 2, name: 'Bun & Beyond', cuisine: 'Modern Burgers', category: 'Western', rating: 4.8, reviewCount: 96, eta: '15–25 min', image: photos.burger, reviews: [{author:'Jared T.',rating:5,text:'Great burger flavour and delicious sauce.'},{author:'Nadia S.',rating:4,text:'Loved the fries and the cheesy burger.'}] },
+  { id: 3, name: 'The Wok Society', cuisine: 'Asian Comfort Food', category: 'Asian', rating: 4.7, reviewCount: 112, eta: '25–35 min', image: photos.ramen, reviews: [{author:'Mei L.',rating:5,text:'The noodle dishes really hit the spot.'},{author:'Amir Z.',rating:4,text:'A comforting bowl of soup on a rainy day.'}] },
+  { id: 4, name: 'Kampung Kita', cuisine: 'Homestyle Malaysian', category: 'Local', rating: 4.9, reviewCount: 185, eta: '20–35 min', image: photos.nasi, reviews: [{author:'Siti M.',rating:5,text:'Tastes just like lunch back in kampung.'},{author:'Hakim N.',rating:5,text:'The kuey teow and soup are my favourites.'}] },
+  { id: 5, name: 'Green Habit', cuisine: 'Fresh Bowls & Greens', category: 'Healthy', rating: 4.8, reviewCount: 74, eta: '15–30 min', image: photos.salad, reviews: [{author:'Sarah K.',rating:5,text:'Fresh ingredients and satisfying portions.'},{author:'Danish A.',rating:4,text:'The mushroom soup is delicious and light.'}] },
+  { id: 6, name: 'Sweet Theory', cuisine: 'Desserts & Coffee', category: 'Desserts', rating: 4.7, reviewCount: 121, eta: '15–25 min', image: photos.cake, reviews: [{author:'Izzah F.',rating:5,text:'Chocolate cake is rich without being too sweet.'},{author:'Arun P.',rating:4,text:'Always come back for their iced drinks.'}] },
+]
+const dish = (id, name, restaurantId, category, price, description, image) => ({ id, name, restaurantId, restaurant:restaurants.find(r=>r.id===restaurantId).name, category, price, description, ...(image ? {image}: {}) })
+export const dishes = [
+  dish(101,'Nasi Lemak Special',1,'Local',12.90,'Fragrant rice, sambal and crispy chicken',photos.nasi),
+  dish(102,'Double Smash Burger',2,'Western',19.90,'Double beef, melted cheese and house sauce',photos.burger),
+  dish(103,'Signature Ramen',3,'Asian',18.50,'Rich broth, noodles and toppings',photos.ramen),
+  dish(104,'Garden Power Bowl',5,'Healthy',16.90,'Fresh greens and roasted vegetables',photos.salad),
+  dish(105,'Chocolate Dream Cake',6,'Desserts',14.50,'Chocolate sponge with a creamy finish',photos.cake),
+  dish(106,'Iced Café Latte',6,'Drinks',11.90,'Espresso with chilled milk',photos.coffee),
+  dish(107,'Char Kuey Teow',1,'Local',13.50,'Wok-fried flat rice noodles with egg and prawns'),
+  dish(108,'Sup Ayam Kampung',1,'Local',11.90,'Clear chicken soup with herbs and vegetables'),
+  dish(109,'Mee Goreng Mamak',1,'Local',11.50,'Spicy fried noodles with tofu and vegetables'),
+  dish(110,'Iced Teh Tarik',1,'Drinks',5.50,'Creamy pulled milk tea over ice'),
+  dish(111,'Iced Milo',1,'Drinks',6.50,'Chilled chocolate malt drink'),
+  dish(112,'Crispy Chicken Burger',2,'Western',17.90,'Crispy chicken, lettuce and special mayo'),
+  dish(113,'Loaded Cheesy Fries',2,'Western',10.90,'Golden fries with melted cheese sauce'),
+  dish(114,'Creamy Mushroom Soup',2,'Western',9.90,'Smooth soup with toasted bread'),
+  dish(115,'Iced Lemon Tea',2,'Drinks',6.90,'Fresh citrus tea served cold'),
+  dish(116,'Iced Chocolate',2,'Drinks',9.50,'Rich cocoa blended with chilled milk'),
+  dish(117,'Soup Kuey Teow',3,'Asian',14.90,'Flat noodles in aromatic chicken broth'),
+  dish(118,'Kung Pao Chicken Rice',3,'Asian',16.90,'Stir-fried chicken with peanuts and rice'),
+  dish(119,'Tom Yum Seafood Soup',3,'Asian',19.90,'Tangy spicy soup with seafood'),
+  dish(120,'Iced Jasmine Tea',3,'Drinks',5.90,'Refreshing fragrant jasmine tea'),
+  dish(121,'Iced Milo',3,'Drinks',6.50,'Malty iced chocolate drink'),
+  dish(122,'Kuey Teow Goreng Basah',4,'Local',13.90,'Saucy stir-fried flat noodles'),
+  dish(123,'Sup Tulang',4,'Local',17.90,'Slow-simmered beef bone soup'),
+  dish(124,'Nasi Kerabu Ayam',4,'Local',15.90,'Herbed rice with spiced chicken'),
+  dish(125,'Iced Sirap Limau',4,'Drinks',5.00,'Rose syrup with fresh lime'),
+  dish(126,'Iced Tea',4,'Drinks',4.50,'Classic refreshing iced tea'),
+  dish(127,'Grilled Chicken Salad',5,'Healthy',18.90,'Lean grilled chicken with fresh greens'),
+  dish(128,'Pumpkin Soup',5,'Healthy',11.90,'Velvety pumpkin soup with seeds'),
+  dish(129,'Teriyaki Tofu Bowl',5,'Healthy',17.50,'Tofu, brown rice and seasonal vegetables'),
+  dish(130,'Iced Green Tea',5,'Drinks',7.90,'Light and refreshing green tea'),
+  dish(131,'Cold-Pressed Orange Juice',5,'Drinks',10.90,'Fresh orange juice, no added sugar'),
+  dish(132,'Classic Burnt Cheesecake',6,'Desserts',15.90,'Creamy cheesecake with caramelised top'),
+  dish(133,'Butter Croissant',6,'Desserts',9.50,'Flaky, buttery pastry'),
+  dish(134,'Strawberry Shortcake',6,'Desserts',16.90,'Soft sponge with whipped cream'),
+  dish(135,'Iced Matcha Latte',6,'Drinks',12.50,'Matcha whisked with chilled milk'),
+  dish(136,'Iced Milo',6,'Drinks',7.50,'Classic malty chocolate on ice'),
+]
+export const categories = ['All','Local','Western','Asian','Healthy','Desserts','Drinks']
+export const money = (amount) => `RM ${amount.toFixed(2)}`
+export const orderSteps = ['Order received','Preparing food','On the way','Delivered']
